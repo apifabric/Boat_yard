@@ -1,0 +1,111 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+
+Table Appointment {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    boat_id INTEGER 
+    service_id INTEGER 
+    appointment_datetime DATETIME 
+    notes VARCHAR 
+    }
+
+Table Boat {
+    id INTEGER [primary key]
+    name VARCHAR 
+    Type VARCHAR 
+    length FLOAT 
+    customer_id INTEGER 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    phone VARCHAR 
+    address VARCHAR 
+    }
+
+Table Service {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    price FLOAT 
+    }
+
+Table Billing {
+    id INTEGER [primary key]
+    appointment_id INTEGER 
+    total_amount FLOAT 
+    payment_date DATETIME 
+    status VARCHAR 
+    }
+
+Table Cleaning {
+    id INTEGER [primary key]
+    boat_id INTEGER 
+    cleaning_date DATETIME 
+    cost FLOAT 
+    }
+
+Table Employee {
+    id INTEGER [primary key]
+    name VARCHAR 
+    position VARCHAR 
+    hire_date DATETIME 
+    }
+
+Table Maintenance {
+    id INTEGER [primary key]
+    boat_id INTEGER 
+    employee_id INTEGER 
+    maintenance_date DATETIME 
+    details VARCHAR 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    part_id INTEGER 
+    order_date DATETIME 
+    quantity INTEGER 
+    }
+
+Table Part {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    price FLOAT 
+    }
+
+Table Repair {
+    id INTEGER [primary key]
+    boat_id INTEGER 
+    description VARCHAR 
+    repair_date DATETIME 
+    cost FLOAT 
+    }
+
+Table Storage {
+    id INTEGER [primary key]
+    boat_id INTEGER 
+    location VARCHAR 
+    start_date DATETIME 
+    end_date DATETIME 
+    }
+
+
+
+// Relationships
+    Ref: Appointment.(boat_id) < Boat.(id)
+    Ref: Appointment.(customer_id) < Customer.(id)
+    Ref: Appointment.(service_id) < Service.(id)
+    Ref: Boat.(customer_id) < Customer.(id)
+    Ref: Billing.(appointment_id) < Appointment.(id)
+    Ref: Cleaning.(boat_id) < Boat.(id)
+    Ref: Maintenance.(boat_id) < Boat.(id)
+    Ref: Maintenance.(employee_id) < Employee.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: Order.(part_id) < Part.(id)
+    Ref: Repair.(boat_id) < Boat.(id)
+    Ref: Storage.(boat_id) < Boat.(id)

@@ -1,0 +1,353 @@
+about:
+  date: October 11, 2024 20:04:40
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 12
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Appointment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: boat_id
+    - name: customer_id
+    - name: service_id
+    - name: appointment_datetime
+    - name: notes
+    description: Table to schedule services for boats.
+    info_list: Table to schedule services for boats.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - appointment_id
+      name: BillingList
+      resource: Billing
+    - direction: toone
+      fks:
+      - boat_id
+      name: boat
+      resource: Boat
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - service_id
+      name: service
+      resource: Service
+    type: Appointment
+    user_key: id
+  Billing:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: appointment_id
+    - name: total_amount
+      required: true
+    - name: payment_date
+    - name: status
+      required: true
+    description: Table for billing and payment records for services.
+    info_list: Table for billing and payment records for services.
+    tab_groups:
+    - direction: toone
+      fks:
+      - appointment_id
+      name: appointment
+      resource: Appointment
+    type: Billing
+    user_key: id
+  Boat:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: customer_id
+    - name: Type
+      required: true
+    - name: length
+    - name: id
+    description: Table to store information about boats owned by customers.
+    info_list: Table to store information about boats owned by customers.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - boat_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - boat_id
+      name: CleaningList
+      resource: Cleaning
+    - direction: tomany
+      fks:
+      - boat_id
+      name: MaintenanceList
+      resource: Maintenance
+    - direction: tomany
+      fks:
+      - boat_id
+      name: RepairList
+      resource: Repair
+    - direction: tomany
+      fks:
+      - boat_id
+      name: StorageList
+      resource: Storage
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Boat
+    user_key: name
+  Cleaning:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: boat_id
+    - name: cleaning_date
+    - name: cost
+      required: true
+    description: Table for cleaning service records.
+    info_list: Table for cleaning service records.
+    tab_groups:
+    - direction: toone
+      fks:
+      - boat_id
+      name: boat
+      resource: Boat
+    type: Cleaning
+    user_key: id
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: email
+    - name: phone
+    - name: address
+    - name: id
+    description: Table to store information about customers.
+    info_list: Table to store information about customers.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - customer_id
+      name: BoatList
+      resource: Boat
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    type: Customer
+    user_key: name
+  Employee:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: position
+      required: true
+    - name: hire_date
+    - name: id
+    description: Table for employees working at the boat yard.
+    info_list: Table for employees working at the boat yard.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - employee_id
+      name: MaintenanceList
+      resource: Maintenance
+    type: Employee
+    user_key: name
+  Maintenance:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: boat_id
+    - name: employee_id
+    - name: maintenance_date
+    - name: details
+    description: Table for scheduled maintenance tasks for boats.
+    info_list: Table for scheduled maintenance tasks for boats.
+    tab_groups:
+    - direction: toone
+      fks:
+      - boat_id
+      name: boat
+      resource: Boat
+    - direction: toone
+      fks:
+      - employee_id
+      name: employee
+      resource: Employee
+    type: Maintenance
+    user_key: id
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: part_id
+    - name: order_date
+    - name: quantity
+      required: true
+    description: Table for parts orders by customers.
+    info_list: Table for parts orders by customers.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - part_id
+      name: part
+      resource: Part
+    type: Order
+    user_key: id
+  Part:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: description
+    - name: price
+      required: true
+    - name: id
+    description: Table for details about parts and upgrades.
+    info_list: Table for details about parts and upgrades.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - part_id
+      name: OrderList
+      resource: Order
+    type: Part
+    user_key: name
+  Repair:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: boat_id
+    - name: repair_date
+    - name: cost
+      required: true
+    - name: id
+    description: Table for engine repair services records.
+    info_list: Table for engine repair services records.
+    tab_groups:
+    - direction: toone
+      fks:
+      - boat_id
+      name: boat
+      resource: Boat
+    type: Repair
+    user_key: description
+  Service:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: description
+    - name: price
+      required: true
+    - name: id
+    description: Table to list types of services offered.
+    info_list: Table to list types of services offered.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - service_id
+      name: AppointmentList
+      resource: Appointment
+    type: Service
+    user_key: name
+  Storage:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: boat_id
+    - name: location
+      required: true
+    - name: start_date
+    - name: end_date
+    description: Table for boats storing details.
+    info_list: Table for boats storing details.
+    tab_groups:
+    - direction: toone
+      fks:
+      - boat_id
+      name: boat
+      resource: Boat
+    type: Storage
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'
